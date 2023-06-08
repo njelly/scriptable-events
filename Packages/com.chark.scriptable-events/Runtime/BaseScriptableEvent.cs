@@ -38,6 +38,9 @@ namespace ScriptableEvents
 
         #region Private Fields
 
+        [Tooltip("If true, on scene load, the asset will be unloaded and a new instance will be created. This is usually undesirable.")]
+        [SerializeField] private bool unloadUnusedAsset = false;
+
         private readonly List<Action<TArg>> listeners = new List<Action<TArg>>();
 
         #endregion
@@ -53,6 +56,14 @@ namespace ScriptableEvents
         #endregion
 
         #region Unity Lifecycle
+
+        private void OnEnable()
+        {
+            if (!unloadUnusedAsset)
+            {
+                hideFlags |= HideFlags.DontUnloadUnusedAsset;
+            }
+        }
 
         private void OnDisable()
         {

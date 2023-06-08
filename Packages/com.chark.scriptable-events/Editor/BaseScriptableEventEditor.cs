@@ -123,10 +123,12 @@ namespace ScriptableEvents.Editor
         private Sirenix.OdinInspector.Editor.InspectorProperty descriptionProperty;
         private Sirenix.OdinInspector.Editor.InspectorProperty isSuppressExceptionsProperty;
         private Sirenix.OdinInspector.Editor.InspectorProperty isDebugProperty;
+        private Sirenix.OdinInspector.Editor.InspectorProperty unloadUnusedAssetProperty;
 #else
         private SerializedProperty descriptionProperty;
         private SerializedProperty isSuppressExceptionsProperty;
         private SerializedProperty isDebugProperty;
+        private SerializedProperty unloadUnusedAssetProperty;
 #endif
 
         private bool isLockDescription = true;
@@ -213,6 +215,7 @@ namespace ScriptableEvents.Editor
 
             EditorGUILayout.Space();
 
+            DrawUnloadUnusedAsset();
             DrawIsSuppressExceptions();
             DrawIsDebug();
         }
@@ -266,10 +269,12 @@ namespace ScriptableEvents.Editor
             descriptionProperty = Tree.GetPropertyAtPath("description");
             isSuppressExceptionsProperty = Tree.GetPropertyAtPath("isSuppressExceptions");
             isDebugProperty = Tree.GetPropertyAtPath("isDebug");
+            unloadUnusedAssetProperty =  Tree.GetPropertyAtPath("unloadUnusedAsset");
 #else
             descriptionProperty = serializedObject.FindProperty("description");
             isSuppressExceptionsProperty = serializedObject.FindProperty("isSuppressExceptions");
             isDebugProperty = serializedObject.FindProperty("isDebug");
+            unloadUnusedAssetProperty = serializedObject.FindProperty("unloadUnusedAsset");
 #endif
         }
 
@@ -313,6 +318,15 @@ namespace ScriptableEvents.Editor
             var value = descriptionProperty.stringValue;
             value = ScriptableEventEditorGUI.DrawDescriptionTextArea(value);
             descriptionProperty.stringValue = value;
+#endif
+        }
+
+        private void DrawUnloadUnusedAsset()
+        {
+#if ODIN_INSPECTOR
+            unloadUnusedAssetProperty.Draw();
+#else
+            EditorGUILayout.PropertyField(unloadUnusedAssetProperty);
 #endif
         }
 
